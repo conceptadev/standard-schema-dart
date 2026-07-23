@@ -1,0 +1,14 @@
+"$schema" = "https://conductor.build/schemas/settings.repo.schema.json"
+
+[scripts]
+setup = "dart pub get"
+run_mode = "concurrent"
+
+[scripts.run.test]
+command = "dart test"
+default = true
+icon = "test-tube"
+
+[scripts.run.example]
+command = "dart run example/standard_schema_example.dart"
+icon = "play"

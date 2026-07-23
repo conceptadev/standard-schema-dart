@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Standard Schema upstream
+    url: https://github.com/standard-schema/standard-schema/issues
+    about: Propose changes to the language-independent standard upstream.

@@ -1,0 +1,34 @@
+name: Contract or feature proposal
+description: Propose an upstream mapping or explicitly Dart-only addition.
+title: "proposal: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use case
+      description: What interoperability problem should this solve?
+    validations:
+      required: true
+  - type: dropdown
+    id: status
+    attributes:
+      label: Proposed status
+      options:
+        - Accepted upstream contract mapping
+        - Dart-only convenience
+        - Upstream proposal needed
+    validations:
+      required: true
+  - type: input
+    id: upstream
+    attributes:
+      label: Upstream issue or specification
+      placeholder: https://github.com/standard-schema/standard-schema/...
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Compatibility and version impact
+    validations:
+      required: true
