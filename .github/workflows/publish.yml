@@ -1,13 +1,49 @@
 name: Publish to pub.dev
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
       - 'v[0-9]+.[0-9]+.[0-9]+-*'
 
 jobs:
+  check:
+    name: Check published version
+    runs-on: ubuntu-latest
+    outputs:
+      published: ${{ steps.version.outputs.published }}
+    steps:
+      - id: version
+        name: Query pub.dev
+        env:
+          PACKAGE_NAME: standard_schema
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          status="$(
+            curl --silent --show-error --output /dev/null \
+              --write-out '%{http_code}' \
+              "https://pub.dev/api/packages/${PACKAGE_NAME}/versions/${version}"
+          )"
+
+          case "${status}" in
+            200)
+              echo "published=true" >> "${GITHUB_OUTPUT}"
+              echo "${PACKAGE_NAME} ${version} is already published."
+              ;;
+            404)
+              echo "published=false" >> "${GITHUB_OUTPUT}"
+              ;;
+            *)
+              echo "Unexpected pub.dev response: HTTP ${status}" >&2
+              exit 1
+              ;;
+          esac
+
   publish:
+    needs: check
+    if: needs.check.outputs.published != 'true'
     permissions:
       id-token: write
     uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
