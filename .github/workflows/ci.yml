@@ -20,7 +20,7 @@ jobs:
           - '3.8.0'
           - stable
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: dart-lang/setup-dart@v1
         with:
           sdk: ${{ matrix.sdk }}
@@ -32,7 +32,7 @@ jobs:
     name: Package quality
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: dart-lang/setup-dart@v1
       - run: dart pub get
       - run: dart format --output=none --set-exit-if-changed .
