@@ -19,20 +19,19 @@ Configure:
 No pub.dev token is stored in GitHub. The official Dart publishing workflow
 uses a short-lived GitHub OIDC identity.
 
-### 2. Configure Release Please credentials
+### 2. Confirm GitHub Actions permissions
 
-Create a repository-scoped fine-grained token or GitHub App credential with
-`Contents: write` and `Pull requests: write`. If Release Please will apply or
-manage issue labels, also grant `Issues: write`. Store the credential as the
-repository secret `RELEASE_PLEASE_TOKEN`.
+The Release Please workflow uses the repository's built-in `GITHUB_TOKEN` to
+maintain release pull requests, create tags and releases, and explicitly
+dispatch the publishing workflow at the new tag. No long-lived pub.dev or
+GitHub credential is required.
 
-The workflow falls back to `GITHUB_TOKEN`, which can maintain release pull
-requests and create GitHub releases. GitHub suppresses new workflow runs caused
-by resources created with `GITHUB_TOKEN`, however, so the dedicated credential
-is required for a release-created tag to trigger the separate pub.dev publish
-workflow automatically.
+If the organization restricts workflow permissions, allow GitHub Actions to
+create and approve pull requests for this repository. The workflow itself
+declares only the permissions required for releases and dispatch.
 
-Keep the credential limited to this repository and these release permissions.
+An optional repository-scoped `RELEASE_PLEASE_TOKEN` secret remains supported
+for organizations that require a GitHub App or separate automation identity.
 
 ### 3. Protect release tags
 
@@ -61,7 +60,11 @@ versions.
 3. Review its version, `pubspec.yaml`, and `CHANGELOG.md`.
 4. Merge the release pull request.
 5. Release Please creates the `v<version>` tag and GitHub release.
-6. The tag triggers the official Dart workflow, which publishes through OIDC.
+6. Release Please dispatches the official Dart workflow at that tag, which
+   publishes through OIDC. A direct tag push also triggers the same workflow.
+
+The publishing workflow checks pub.dev first, so rerunning it for an immutable
+version completes without attempting a duplicate upload.
 
 Before merging a release pull request, confirm the proposed version follows
 Semantic Versioning and that CI's publish dry run has no warnings.
