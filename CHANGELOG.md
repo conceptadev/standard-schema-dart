@@ -8,9 +8,13 @@
 - Add canonical `StandardTypedV1`, `StandardSchemaV1`, and
   `StandardJsonSchemaV1` names. The dev.0 names remain available as aliases.
 - Add `StandardPathSegment` and the opt-in `utils.dart` library with
-  `getDotPath` and `StandardSchemaError`.
+  `getDotPath` and the upstream-compatible `SchemaError`.
 - Add a complete package example covering validation, transformed output,
   JSON Schema conversion, and dot-path rendering.
+- Add consumer guides for forms, API boundaries, component and tool catalogs,
+  AI structured output, and configuration loading.
+- Record the exact upstream source revision, Dart mapping decisions, and
+  package discovery topics.
 
 ### Changed
 

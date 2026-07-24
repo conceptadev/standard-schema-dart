@@ -12,6 +12,28 @@ by [standardschema.dev](https://standardschema.dev). It is maintained by
 [Concepta](https://github.com/conceptadev) and is not an official package of,
 or endorsed by, the upstream Standard Schema project.
 
+## The problem it solves
+
+Without a shared contract, every form library, API framework, UI catalog, or AI
+tool must understand every validator's private schema model. Supporting more
+libraries then means maintaining a growing matrix of vendor-specific adapters.
+
+With Standard Schema:
+
+- a validator library implements one shared capability;
+- a consuming library accepts that capability once; and
+- application developers pass their normal schema object directly.
+
+For example, a component catalog can accept any
+`StandardJsonSchemaV1` implementation, request JSON Schema for the model-facing
+input, and remain independent of the schema vendor. A form or API boundary can
+accept `StandardSchemaV1`, validate unknown data, and receive typed output.
+
+Unlike TypeScript's structural type-only specification, Dart uses nominal
+typing. Producers and consumers therefore share this small runtime package and
+use its interfaces and immutable result objects. The package has no runtime
+dependencies.
+
 ## What this package standardizes
 
 The package exposes two upstream contracts and one Dart convenience:
@@ -72,6 +94,18 @@ if (schema is StandardJsonSchemaV1<Object?, Object?>) {
 The JSON Schema maps returned by converters are owned by the implementing
 library. Consumers should treat them as JSON Schema for the requested target,
 not as canonical byte-for-byte output shared by every vendor.
+
+## Consumer use cases
+
+| Consumer | Accepted capability | Experience |
+| --- | --- | --- |
+| Form library | `StandardSchemaV1` | Validate field values and map issues to dot paths |
+| API or router | `StandardSchemaV1` | Validate unknown request data and pass typed output to handlers |
+| Component or tool catalog | `StandardJsonSchemaV1` | Describe model-facing inputs without importing a vendor schema model |
+| AI structured output | `StandardJsonSchemaV1` | Request a supported JSON Schema dialect from any producer |
+| Config loader | `StandardSchemaV1` | Validate environment or configuration values at startup |
+
+See [Consumer use cases](doc/use-cases.md) for complete Dart examples.
 
 ## Dart mapping notes
 
@@ -195,7 +229,7 @@ import 'package:standard_schema/utils.dart';
 - `getDotPath(issue)` renders raw path keys and `StandardPathSegment(key: ...)`
   entries in dot notation (for example `user.tags.1`), or returns `null` when
   the issue has no path or contains a key that is not a string or number.
-- `StandardSchemaError(issues)` wraps a failure's issues as a throwable whose
+- `SchemaError(issues)` wraps a non-empty issue list as a throwable whose
   `message` is the first issue's message.
 
 ```dart
@@ -208,7 +242,7 @@ if (result is StandardFailure) {
   }
 
   // Or throw the whole failure as a single error:
-  throw StandardSchemaError(result.issues);
+  throw SchemaError(result.issues);
 }
 ```
 
@@ -228,12 +262,13 @@ opening a pull request. Maintainer decisions and the approval path for
 unofficial or upstream-facing additions are described in
 [GOVERNANCE.md](GOVERNANCE.md).
 
-Versions, changelog entries, tags, GitHub releases, and pub.dev publication are
-automated. Maintainer setup and the release runbook live in
-[doc/releasing.md](doc/releasing.md).
+After the one-time maintainer setup, versions, changelog entries, tags, GitHub
+releases, and pub.dev publication are automated. The setup and release runbook
+live in [doc/releasing.md](doc/releasing.md).
 
 ## License and attribution
 
 This package is licensed under the BSD 3-Clause License. The interfaces are
 based on the MIT-licensed upstream Standard Schema project; see
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). The exact upstream revision
+and Dart mapping are recorded in [Upstream provenance](doc/upstream.md).

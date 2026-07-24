@@ -6,6 +6,12 @@ version: 0.0.1
 repository: https://github.com/conceptadev/standard-schema-dart
 issue_tracker: https://github.com/conceptadev/standard-schema-dart/issues
 homepage: https://github.com/conceptadev/standard-schema-dart
+topics:
+  - validation
+  - schema
+  - json-schema
+  - interoperability
+  - standard-schema
 
 environment:
   sdk: '>=3.8.0 <4.0.0'

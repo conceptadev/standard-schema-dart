@@ -22,15 +22,15 @@ String? getDotPath(StandardIssue issue) {
 /// An [Exception] wrapping the [issues] of a failed Standard Schema validation,
 /// exposing the first issue's [message]. The standard way to throw on failure.
 ///
-/// Port of `SchemaError` from `@standard-schema/utils`, renamed to avoid
-/// colliding with Ack's own `SchemaError` (which `package:ack` re-exports).
-class StandardSchemaError implements Exception {
-  /// Wraps [issues]. Throws [ArgumentError] when [issues] is empty: a failure
-  /// always carries at least one issue, and [message] is taken from the first.
-  StandardSchemaError(Iterable<StandardIssue> issues)
-    : this._(_snapshotIssues(issues));
+/// Dart port of `SchemaError` from `@standard-schema/utils`.
+class SchemaError implements Exception {
+  /// Wraps [issues].
+  ///
+  /// Throws [ArgumentError] when [issues] is empty because [message] is taken
+  /// from the first issue, matching the upstream utility.
+  SchemaError(Iterable<StandardIssue> issues) : this._(_snapshotIssues(issues));
 
-  StandardSchemaError._(this.issues) : message = issues.first.message;
+  SchemaError._(this.issues) : message = issues.first.message;
 
   static List<StandardIssue> _snapshotIssues(Iterable<StandardIssue> issues) {
     final issueList = List<StandardIssue>.unmodifiable(issues);
@@ -47,5 +47,5 @@ class StandardSchemaError implements Exception {
   final String message;
 
   @override
-  String toString() => 'StandardSchemaError: $message';
+  String toString() => 'SchemaError: $message';
 }

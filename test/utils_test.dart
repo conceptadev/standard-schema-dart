@@ -61,23 +61,23 @@ void main() {
     );
   });
 
-  group('StandardSchemaError', () {
+  group('SchemaError', () {
     test('wraps issues and exposes the first issue message', () {
       final issues = [
         StandardIssue(message: 'first', path: ['a']),
         StandardIssue(message: 'second'),
       ];
-      final error = StandardSchemaError(issues);
+      final error = SchemaError(issues);
 
       expect(error, isA<Exception>());
       expect(error.issues, issues);
       expect(error.message, 'first');
-      expect(error.toString(), 'StandardSchemaError: first');
+      expect(error.toString(), 'SchemaError: first');
     });
 
     test('stores issues as an unmodifiable snapshot', () {
       final issues = [StandardIssue(message: 'first')];
-      final error = StandardSchemaError(issues);
+      final error = SchemaError(issues);
 
       issues.add(StandardIssue(message: 'second'));
 
@@ -94,7 +94,7 @@ void main() {
         yield StandardIssue(message: 'first');
       }
 
-      final error = StandardSchemaError(issues());
+      final error = SchemaError(issues());
 
       expect(error.issues.single.message, 'first');
       expect(
@@ -104,7 +104,7 @@ void main() {
     });
 
     test('throws when constructed with no issues', () {
-      expect(() => StandardSchemaError(const []), throwsArgumentError);
+      expect(() => SchemaError(const []), throwsArgumentError);
     });
   });
 }

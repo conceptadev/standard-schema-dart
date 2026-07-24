@@ -21,9 +21,10 @@ uses a short-lived GitHub OIDC identity.
 
 ### 2. Configure Release Please credentials
 
-Create a fine-grained token or GitHub App credential that can create pull
-requests, tags, and releases in this repository. Store it as the repository
-secret `RELEASE_PLEASE_TOKEN`.
+Create a repository-scoped fine-grained token or GitHub App credential with
+`Contents: write` and `Pull requests: write`. If Release Please will apply or
+manage issue labels, also grant `Issues: write`. Store the credential as the
+repository secret `RELEASE_PLEASE_TOKEN`.
 
 The workflow falls back to `GITHUB_TOKEN`, which can maintain release pull
 requests and create GitHub releases. GitHub suppresses new workflow runs caused
@@ -31,8 +32,7 @@ by resources created with `GITHUB_TOKEN`, however, so the dedicated credential
 is required for a release-created tag to trigger the separate pub.dev publish
 workflow automatically.
 
-Keep the credential limited to this repository with only the permissions used
-by the release workflow.
+Keep the credential limited to this repository and these release permissions.
 
 ### 3. Protect release tags
 

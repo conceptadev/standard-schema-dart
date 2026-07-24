@@ -10,6 +10,9 @@ Standard Schema interfaces and utilities:
 - Copyright: Copyright (c) 2024 Colin McDonnell
 - License: MIT
 
+The exact source revision adapted by this release is recorded in
+[doc/upstream.md](doc/upstream.md).
+
 The upstream license follows.
 
 ```text

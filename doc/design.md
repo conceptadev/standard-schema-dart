@@ -68,12 +68,30 @@ if (value is StandardJsonSchemaV1<Object?, Object?>) {
 }
 ```
 
+## Package-owned values
+
+The upstream TypeScript contract relies on structural typing. Dart uses nominal
+typing, so producers and consumers must import this shared runtime package to
+agree on the same interfaces and values.
+
+The top-level capabilities are interfaces. Their properties, options, results,
+issues, and converter objects are immutable values owned by this package.
+Producers return `StandardSchemaPropsV1`, `StandardSuccess`,
+`StandardFailure`, and the corresponding JSON Schema values rather than
+redeclaring structurally similar classes.
+
+This tradeoff gives Dart consumers stable runtime checks and exhaustive pattern
+matching over validation results while keeping the package small and free of
+runtime dependencies.
+
 ## Upstream alignment and approval
 
 The authoritative standard lives at
 [standardschema.dev](https://standardschema.dev) and
 [`standard-schema/standard-schema`](https://github.com/standard-schema/standard-schema).
-This Dart package is independent and unofficial.
+This Dart package is independent and unofficial. The exact source revision and
+language mapping used by each release are recorded in
+[Upstream provenance](upstream.md).
 
 For a proposed contract change:
 

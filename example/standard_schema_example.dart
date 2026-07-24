@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:standard_schema/standard_schema.dart';
 import 'package:standard_schema/utils.dart';
 
@@ -66,28 +64,39 @@ final class RequiredStringWithJsonSchema
 }
 
 Future<void> main() async {
-  await printResult(const RequiredStringSchema().standard.validate('Ada'));
-  await printResult(const StringToIntSchema().standard.validate('42'));
+  final name = await validateInput(const RequiredStringSchema(), 'Ada');
+  final age = await validateInput(const StringToIntSchema(), '42');
+  print('Validated: $name is $age');
 
   final schema = const RequiredStringWithJsonSchema();
-  final inputJsonSchema = schema.standard.jsonSchema.input(
-    const StandardJsonSchemaOptions(target: JsonSchemaTarget.draft07),
-  );
-  print(inputJsonSchema);
+  print(modelInputSchema(schema));
 
-  await printResult(schema.standard.validate(''));
+  try {
+    await validateInput(schema, '');
+  } on SchemaError catch (error) {
+    for (final issue in error.issues) {
+      final path = getDotPath(issue) ?? '<root>';
+      print('$path: ${issue.message}');
+    }
+  }
 }
 
-Future<void> printResult<T>(FutureOr<StandardResult<T>> result) async {
-  final resolved = await Future.value(result);
+Future<Output> validateInput<Input, Output>(
+  StandardSchemaV1<Input, Output> schema,
+  Object? value,
+) async {
+  final result = await Future.value(schema.standard.validate(value));
 
-  switch (resolved) {
-    case StandardSuccess(value: final value):
-      print('Valid: $value');
-    case StandardFailure(issues: final issues):
-      for (final issue in issues) {
-        final path = getDotPath(issue) ?? '<root>';
-        print('$path: ${issue.message}');
-      }
-  }
+  return switch (result) {
+    StandardSuccess(value: final output) => output,
+    StandardFailure(issues: final issues) => throw SchemaError(issues),
+  };
+}
+
+Map<String, Object?> modelInputSchema<Input, Output>(
+  StandardJsonSchemaV1<Input, Output> schema,
+) {
+  return schema.standard.jsonSchema.input(
+    const StandardJsonSchemaOptions(target: JsonSchemaTarget.draft202012),
+  );
 }

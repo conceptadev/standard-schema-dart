@@ -163,7 +163,10 @@ final class StandardSuccess<Output> extends StandardResult<Output> {
   final Output value;
 }
 
-/// A failed validation result carrying one or more [issues].
+/// A failed validation result carrying validation [issues].
+///
+/// The upstream V1 contract permits an empty issue list, although producers
+/// should normally provide at least one actionable issue.
 final class StandardFailure<Output> extends StandardResult<Output> {
   StandardFailure(Iterable<StandardIssue> issues)
     : issues = List.unmodifiable(issues);
