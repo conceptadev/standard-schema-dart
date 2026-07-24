@@ -40,8 +40,7 @@ final class _JsonSchemaOnlySchema implements StandardJsonSchemaV1<String, int> {
           input: (options) => {
             r'$schema': options.target,
             'type': 'string',
-            if (options.libraryOptions case final options?)
-              'x-options': options,
+            'x-options': ?options.libraryOptions,
           },
           output: (options) => {'type': 'integer'},
         ),
