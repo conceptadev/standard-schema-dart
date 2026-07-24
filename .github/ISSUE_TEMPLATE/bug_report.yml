@@ -1,0 +1,42 @@
+name: Bug report
+description: Report incorrect package behavior or contract mapping.
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for helping improve standard_schema.
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      placeholder: 0.0.1
+    validations:
+      required: true
+  - type: input
+    id: dart
+    attributes:
+      label: Dart version
+      placeholder: Output of dart --version
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      render: dart
+    validations:
+      required: true
+  - type: textarea
+    id: upstream
+    attributes:
+      label: Upstream reference
+      description: Link the Standard Schema contract when relevant.
